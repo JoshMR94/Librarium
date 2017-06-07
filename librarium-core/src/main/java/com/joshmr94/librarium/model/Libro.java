@@ -1,20 +1,53 @@
 package com.joshmr94.librarium.model;
 
+import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 /**
  *
  * @author joshmr94
  */
-public class Libro {
+@Entity
+@Table(name = "libro")
+public class Libro implements Serializable{
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
+    
+    @Column(name = "titulo", nullable = false)
     private String titulo;
+    
+    @Column(name = "autor", nullable = false)
     private String autor;
+    
+    @Column(name = "categoria", nullable = false)
     private String categoria;
+    
+    @Column(name = "genero", nullable = false)
     private String genero;
+    
+    @Column(name = "ISBN", nullable = false)
     private String ISBN;
+    
+    @Column(name = "editorial", nullable = true)
     private String editorial;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_publicacion", nullable = true)
+    private Date fechaPublicacion;
 
-    public Libro(Long id, String titulo, String autor, String categoria, String genero, String ISBN, String editorial) {
+    public Libro(Long id, String titulo, String autor, String categoria, String genero, 
+            String ISBN, String editorial, Date fechaPublicacion) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
@@ -22,6 +55,7 @@ public class Libro {
         this.genero = genero;
         this.ISBN = ISBN;
         this.editorial = editorial;
+        this.fechaPublicacion = fechaPublicacion;
     }
     
     public Libro(){}
@@ -81,7 +115,13 @@ public class Libro {
     public void setEditorial(String editorial) {
         this.editorial = editorial;
     }
-    
-    
+
+    public Date getFechaPublicacion() {
+        return fechaPublicacion;
+    }
+
+    public void setFechaPublicacion(Date fechaPublicacion) {
+        this.fechaPublicacion = fechaPublicacion;
+    }
     
 }

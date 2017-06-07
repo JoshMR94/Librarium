@@ -15,6 +15,7 @@ public class Usuario {
     private String password;
     private String descripcion;
     private Set<Rol> roles = new HashSet<>();
+    /*Falta añadir lista de libros*/
     
     private TipoUsuario tipoUsuario;
     public enum TipoUsuario {

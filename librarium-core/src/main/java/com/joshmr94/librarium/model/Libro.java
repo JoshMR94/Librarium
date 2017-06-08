@@ -2,11 +2,13 @@ package com.joshmr94.librarium.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -24,13 +26,10 @@ public class Libro implements Serializable{
     @Column(nullable = false)
     private Long id;
     
-    @Column(name = "titulo", nullable = false)
+    @Column(name = "titulo", nullable = false, length = 255)
     private String titulo;
     
-    @Column(name = "autor", nullable = false)
-    private String autor;
-    
-    @Column(name = "categoria", nullable = false)
+    @Column(name = "categoria", nullable = false, length = 255)
     private String categoria;
     
     @Column(name = "genero", nullable = false)
@@ -45,17 +44,24 @@ public class Libro implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_publicacion", nullable = true)
     private Date fechaPublicacion;
+    
+    @ManyToMany(mappedBy = "libros") //mapeada por atributo libros en Usuario
+    private List<Usuario> usuarios;
+    
+    @ManyToMany(mappedBy = "libros") //mapeada por atributo libros en Autor
+    private List<Autor> autores;
 
-    public Libro(Long id, String titulo, String autor, String categoria, String genero, 
-            String ISBN, String editorial, Date fechaPublicacion) {
+    public Libro(Long id, String titulo, String categoria, String genero, 
+            String ISBN, String editorial, Date fechaPublicacion, 
+            List<Autor> autores) {
         this.id = id;
         this.titulo = titulo;
-        this.autor = autor;
         this.categoria = categoria;
         this.genero = genero;
         this.ISBN = ISBN;
         this.editorial = editorial;
         this.fechaPublicacion = fechaPublicacion;
+        this.autores = autores;
     }
     
     public Libro(){}
@@ -74,14 +80,6 @@ public class Libro implements Serializable{
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
     }
 
     public String getCategoria() {

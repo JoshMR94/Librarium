@@ -1,22 +1,58 @@
 package com.joshmr94.librarium.model;
 
 import com.joshmr94.librarium.rbac.model.Rol;
+import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author joshmr94
  */
-public class Usuario {
+@Entity
+@Table(name = "usuario")
+public class Usuario implements Serializable {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
-    private String password;
-    private String descripcion;
-    private Set<Rol> roles = new HashSet<>();
-    /*Falta añadir lista de libros*/
     
+    @Column(name = "username", nullable = false, length = 255, unique = true)
+    private String username;
+    
+    @Column(name = "password", nullable = false, length = 255)
+    private String password;
+    
+    @Column(name = "descripcion", nullable = true, length = 255)
+    private String descripcion;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Rol> roles = new HashSet<>();
+    
+    @ManyToMany
+    @JoinTable(
+            name="libros_usuario",
+            joinColumns=@JoinColumn(name = "usuario_id", referencedColumnName = "id"),
+            inverseJoinColumns =@JoinColumn(name="libro_id", referencedColumnName = "id")
+    )
+    private List<Libro> libros;
+    
+    @Column(nullable = true)
+    @Enumerated(EnumType.ORDINAL)
     private TipoUsuario tipoUsuario;
     public enum TipoUsuario {
         ADMIN,
@@ -81,6 +117,16 @@ public class Usuario {
     public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
+
+    public List<Libro> getLibros() {
+        return libros;
+    }
+
+    public void setLibros(List<Libro> libros) {
+        this.libros = libros;
+    }
+    
+    
     
     
 }

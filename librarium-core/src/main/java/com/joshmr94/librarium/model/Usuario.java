@@ -1,7 +1,12 @@
 package com.joshmr94.librarium.model;
 
+import com.joshmr94.librarium.rbac.model.BaseEntity;
 import com.joshmr94.librarium.rbac.model.Rol;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,18 +19,19 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.Table;
 
 /**
  *
  * @author joshmr94
  */
 @Entity
-@Table(name = "usuario")
-public class Usuario implements Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Usuario extends BaseEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -91,7 +97,7 @@ public class Usuario implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = encryptAndEncodePassword(password);;
     }
 
     public String getDescripcion() {
@@ -126,7 +132,12 @@ public class Usuario implements Serializable {
         this.libros = libros;
     }
     
-    
-    
-    
+    public static String encryptAndEncodePassword(String pwd) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            return Base64.getEncoder().encodeToString(md.digest(pwd.getBytes("utf-8")));
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }      
 }

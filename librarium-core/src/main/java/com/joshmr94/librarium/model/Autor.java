@@ -38,7 +38,7 @@ public class Autor implements Serializable {
     @Column(name = "fecha_nacimiento", nullable = true)
     private Date fechaNacimiento;
     
-    @Column(name = "nombre", nullable = false, length = 255)
+    @Column(name = "descripcion", nullable = false, length = 255)
     private String descripcion;
     
     @ManyToMany

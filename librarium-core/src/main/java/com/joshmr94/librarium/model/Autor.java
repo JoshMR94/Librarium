@@ -1,5 +1,6 @@
 package com.joshmr94.librarium.model;
 
+import com.joshmr94.librarium.rbac.model.BaseEntity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "autor")
-public class Autor implements Serializable {
+public class Autor extends BaseEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

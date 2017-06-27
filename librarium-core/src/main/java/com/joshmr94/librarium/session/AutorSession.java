@@ -39,16 +39,16 @@ public class AutorSession extends CommonSession<Autor> {
         }
     }
     
-    public List<Autor> findAutorById(Long id) {
+    public Autor findAutorById(Long id) {
         try {
             String queryString;
             queryString = String.format("select * from autor where autor.id = :id", Autor.class.getName());
             Query query = getEntityManager().createQuery(queryString);
             query.setParameter("id", id);
-            return (List<Autor>) query.getResultList();
+            return (Autor) query.getSingleResult();
         } catch (Exception e) {
             LOG.error("Error al obtener el autor por id", e);
-            return new ArrayList<>();
+            return null;
         } finally {
             closeEntityManager();
         }
